@@ -1,0 +1,1 @@
+Yippee is a yay wrapper that adds the functionality of telling you how much time has elapsed since you ran yay. I've included an installation shellscript that will download the main script and append aliases to your configurations for the bash, zsh, and fish shells.
