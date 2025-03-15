@@ -1,32 +1,38 @@
 #!/bin/bash
 
-INSTALL_PATH="$HOME/.yippee.py"
-SCRIPT_URL="https://raw.githubusercontent.com/rezadoz/yippee/refs/heads/main/yippee.py"
+install_path="$HOME/.yippee.py"
+script_url="https://raw.githubusercontent.com/rezadoz/yippee/main/yippee.py"
 
 echo ":: starting yippee installation ::"
 
 install_script() {
     echo "-> downloading yippee script..."
-    if ! curl -sfL "$SCRIPT_URL" -o "$INSTALL_PATH"; then
-        echo "ERROR: failed to download script from $SCRIPT_URL"
+    if ! curl -sfL "$script_url" -o "$install_path"; then
+        echo "error: failed to download script from $script_url"
         exit 1
     fi
 
     echo "-> setting executable permissions..."
-    chmod +x "$INSTALL_PATH"
-    echo "SUCCESS: script installed to $INSTALL_PATH"
+    chmod +x "$install_path"
+    echo "success: script installed to $install_path"
 }
 
 add_alias() {
     local shell_config=$1
-    local alias_line="alias yay='$INSTALL_PATH'  # yippee wrapper for yay"
+    local alias_line=""
+
+    if [[ "$shell_config" == *"fish/config.fish" ]]; then
+        alias_line="alias yay \"$install_path\""
+    else
+        alias_line="alias yay='$install_path'"
+    fi
 
     if [ -f "$shell_config" ]; then
         echo "-> checking $shell_config..."
         if ! grep -q "yippee wrapper for yay" "$shell_config"; then
             echo "-> adding alias to $shell_config"
-            echo "$alias_line" >> "$shell_config"
-            echo "SUCCESS: updated $shell_config"
+            echo "$alias_line  # yippee wrapper for yay" >> "$shell_config"
+            echo "success: updated $shell_config"
         else
             echo "-> alias already exists in $shell_config - skipping"
         fi
@@ -46,9 +52,12 @@ final_steps() {
     echo ""
     echo ":: installation complete ::"
     echo "you may need to:"
-    echo "1. start a new terminal session"
-    echo "2. or run: source ~/.bashrc (or your shell config)"
-    echo "3. drink water"
+    echo "start a new terminal session"
+    echo "or instead run 'source ~/.bashrc' or 'source ~/.zshrc'"
+    echo "for fish: you can run 'source ~/.config/fish/config.fish'"
+    echo "you may also need to hydrate"
+    echo ""
+    echo "now would be a good time to execute yay and verify yippee is working"
 }
 
 install_script
