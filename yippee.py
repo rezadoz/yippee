@@ -62,4 +62,8 @@ def main():
     sys.exit(proc.returncode)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nalright whatever")
+        sys.exit(0)
